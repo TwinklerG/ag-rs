@@ -7,9 +7,13 @@
   <img alt="GitHub All Releases" src="https://img.shields.io/github/downloads/TwinklerG/ag-rs/total">
 </div>
 
+## ✋ Demo
+
+![demo](./README.assets/demo.gif)
+
 ## 🚀 Quick Start
 
-Get an `API_KEY` from [siliconflow](https://cloud.siliconflow.cn/account/ak) and set the `API_KEY` environment variable in your OS
+Get an `API_KEY` from [siliconflow](https://cloud.siliconflow.cn/account/ak) and set the `API_KEY` environment variable
 
 then just enter one command
 
