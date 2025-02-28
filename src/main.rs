@@ -1,11 +1,18 @@
+use clap::Parser;
 use futures_util::StreamExt;
 use reqwest::header::HeaderMap;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use std::io::Write;
+use std::io::{Read, Write};
 
 const URL: &str = "https://api.siliconflow.cn/v1/chat/completions";
 const MODEL: &str = "deepseek-ai/DeepSeek-R1-Distill-Llama-8B";
+
+#[derive(Parser)]
+struct Cli {
+    #[arg(short, long)]
+    multi_lines: bool,
+}
 
 #[derive(Serialize, Deserialize)]
 struct Payload {
@@ -42,6 +49,7 @@ struct Delta {
 
 #[tokio::main]
 async fn main() {
+    let cli = Cli::parse();
     let api_key = std::env::var("API_KEY").expect("You must set the API_KEY environment variable");
     let client = reqwest::Client::new();
     let mut payload = Payload::new(MODEL, true);
@@ -49,7 +57,16 @@ async fn main() {
         print!("☁️ : ");
         std::io::stdout().flush().unwrap();
         let mut s = String::new();
-        std::io::stdin().read_line(&mut s).unwrap();
+        if let Err(error) = {
+            if cli.multi_lines {
+                std::io::stdin().read_to_string(&mut s)
+            } else {
+                std::io::stdin().read_line(&mut s)
+            }
+        } {
+            println!("❌ Read input error: {}", error);
+            continue;
+        };
         let s = s.trim();
         if s == "q".to_string() || s.is_empty() {
             break;
