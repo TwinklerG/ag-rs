@@ -125,7 +125,7 @@ async fn main() {
         std::io::stdout().flush().unwrap();
         let mut tokens = 0;
         while let Some(chunk) = stream.next().await {
-            if let Err(_) = chunk {
+            if chunk.is_err() {
                 continue;
             }
             let chunk = chunk.unwrap().slice(6..);
@@ -146,6 +146,6 @@ async fn main() {
                 }
             }
         }
-        println!("\n{}total tokens: {}", color::Fg(color::Yellow),tokens);
+        println!("\n{}total tokens: {}{}", color::Fg(color::Yellow),tokens, color::Fg(color::Reset));
     }
 }
